@@ -12,7 +12,9 @@ string face_classifier_dir = "C:\\openCV\\Build\\install\\etc\\haarcascades\\haa
 string prof_face_classifier_dir = "C:\\openCV\\Build\\install\\etc\\haarcascades\\haarcascade_profileface.xml";
 int main() {
 	cv::VideoCapture capture;
-	Mat frame, out_frame;
+	Mat frame;
+	dlib::shape_predictor keypoint_detector;
+	vector<vector<Rect>> out_bboxes;
 	FaceDetection *fd;
 	capture.open(0);
 	if (!capture.isOpened()) {
@@ -24,10 +26,18 @@ int main() {
 	while (true) {
 		capture.read(frame);
 		cv::namedWindow("Display Window 1", CV_WINDOW_AUTOSIZE);
-		out_frame= fd->FaceDetectionCaller(frame);
+		out_bboxes= fd->FaceDetectionCaller(frame);
+		for (size_t i = 0; i < out_bboxes.size(); i++)
+		{
+			for (size_t j = 0; j < out_bboxes.at(i).size(); j++)
+			{
+				cv::rectangle(frame, out_bboxes.at(i).at(j), Scalar(0, i*128, 255), 1);
+			}
+		}
+		
 		if (cv::waitKey(1) == 27)
 			break;
-		imshow("Display Window 1", out_frame);
+		imshow("Display Window 1", frame);
 	}
 	capture.release();
 	cv::destroyWindow("Display Window 1");

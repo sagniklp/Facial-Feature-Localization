@@ -51,10 +51,11 @@ public:
 		//cout << "\n fromlpf" << lfaces.size();
 		face_rect.set_value(lfaces);
 	}
-	static Mat facedetect_boundingbox(Mat frame) {
+	static vector<vector<Rect>> facedetect_boundingbox(Mat frame) {
 		//vector<Rect> faces;
 		//vector<Rect> right_profile_faces;
 		//vector<Rect> left_profile_faces;
+		vector<vector<Rect>> bboxes;
 		promise<vector<Rect>> faces;
 		promise<vector<Rect>> right_profile_faces;
 		promise<vector<Rect>> left_profile_faces;
@@ -80,34 +81,51 @@ public:
 		int scalef = 3;
 
 		if (f.size()) {
+			
 			for (size_t i = 0; i < f.size(); i++)
 			{
-				cv::rectangle(frame, Point(scalef * f[i].x, scalef * f[i].y), Point(scalef * (f[i].x + f[i].width), scalef * (f[i].y + f[i].height)), Scalar(255, 0, 255), 3);
+				f[i].x = scalef * f[i].x;
+				f[i].y = scalef * f[i].y;
+				f[i].width = scalef * f[i].width;
+				f[i].height = scalef * f[i].height;
+				//cv::rectangle(frame, Point(scalef * f[i].x, scalef * f[i].y), Point(scalef * (f[i].x + f[i].width), scalef * (f[i].y + f[i].height)), Scalar(255, 0, 255), 3);
 			}
+
 		}
 		else if (lf.size()) {
+			
 			for (size_t i = 0; i < lf.size(); i++)
 			{
-				cv::rectangle(frame, Point(scalef * lf[i].x, scalef * lf[i].y), Point(scalef * (lf[i].x + lf[i].width), scalef * (lf[i].y + lf[i].height)), Scalar(0, 255, 255), 3);
+				lf[i].x = scalef * lf[i].x;
+				lf[i].y = scalef * lf[i].y;
+				lf[i].width = scalef * lf[i].width;
+				lf[i].height = scalef * lf[i].height;
+				//cv::rectangle(frame, Point(scalef * lf[i].x, scalef * lf[i].y), Point(scalef * (lf[i].x + lf[i].width), scalef * (lf[i].y + lf[i].height)), Scalar(0, 255, 255), 3);
 			}
 		}
 		else if (rf.size()) {
+			
 			for (size_t i = 0; i < rf.size(); i++)
 			{
 				int curr_x = scalef * rf[i].x;
 				int curr_y = scalef * rf[i].y;
-				int flippd_x = frame.cols - curr_x - (rf[i].width*scalef);
-				int flippd_y = curr_y;
-				cv::rectangle(frame, Point(flippd_x, flippd_y), Point(frame.cols - curr_x, curr_y + (scalef * rf[i].height)), Scalar(255, 255, 0), 3);
+				rf[i].x = frame.cols - curr_x - (rf[i].width*scalef);
+				rf[i].y = curr_y;
+				rf[i].height = scalef * rf[i].height;
+				rf[i].width = scalef * rf[i].width;
+				//cv::rectangle(frame, Point(flippd_x, flippd_y), Point(frame.cols - curr_x, curr_y + (scalef * rf[i].height)), Scalar(255, 255, 0), 3);
 			}
 		}
-		return frame;
+		bboxes.push_back(f);
+		bboxes.push_back(lf);
+		bboxes.push_back(rf);
+		return bboxes;
 	}
 
-	Mat FaceDetectionCaller (Mat frame) {
+	vector<vector<Rect>> FaceDetectionCaller (Mat frame) {
 		//Reading the video stream 
-		Mat f_detected_frame=facedetect_boundingbox(frame);
-		return f_detected_frame;
+		vector<vector<Rect>> f_detected_bboxes=facedetect_boundingbox(frame);
+		return f_detected_bboxes;
 	}
 
 	FaceDetection(string fc, string pc) {
