@@ -5,6 +5,11 @@ VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Facial Feature Localization", "Facial Feature Localization\Facial Feature Localization.vcxproj", "{7D110B25-8DF7-4011-A53F-BCFE49D98773}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9A86D131-AB5B-418E-91B8-72B9B1EA9BDE}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\..\..\..\dlib-19.7\dlib\all\source.cpp = ..\..\..\..\..\..\..\dlib-19.7\dlib\all\source.cpp
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
