@@ -16,6 +16,7 @@ using cv::Rect;
 using cv::Scalar;
 using cv::Point;
 using cv::Size;
+using cv::circle;
 using std::promise;
 using std::future;
 using std::string;
@@ -77,7 +78,7 @@ public:
 		t2.detach();
 		vector<Rect> rf = ftr_right_profile_faces.get();
 		t3.detach();
-
+		//cout << "****" << typeid(rf).name() << "\n";
 		int scalef = 3;
 
 		if (f.size()) {
